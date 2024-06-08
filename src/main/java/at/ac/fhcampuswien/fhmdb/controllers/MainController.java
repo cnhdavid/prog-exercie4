@@ -120,3 +120,4 @@ public class MainController {
         setContent(UIComponent.MOVIELIST.path);
     }
 }
+

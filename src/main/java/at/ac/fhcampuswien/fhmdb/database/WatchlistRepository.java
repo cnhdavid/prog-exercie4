@@ -1,12 +1,16 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.ui.Observable;
+import at.ac.fhcampuswien.fhmdb.ui.Observer;
 import com.j256.ormlite.dao.Dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class WatchlistRepository {
-
-    Dao<WatchlistMovieEntity, Long> dao;
+public class WatchlistRepository implements Observable {
+    private static WatchlistRepository instance;
+    private Dao<WatchlistMovieEntity, Long> dao;
+    private final List<Observer> observers = new ArrayList<>();
 
     public WatchlistRepository() throws DataBaseException {
         try {
@@ -14,6 +18,13 @@ public class WatchlistRepository {
         } catch (Exception e) {
             throw new DataBaseException(e.getMessage());
         }
+    }
+
+    public static WatchlistRepository getInstance() throws DataBaseException {
+        if (instance == null) {
+            instance = new WatchlistRepository();
+        }
+        return instance;
     }
 
     public List<WatchlistMovieEntity> getWatchlist() throws DataBaseException {
@@ -44,6 +55,23 @@ public class WatchlistRepository {
             return dao.delete(dao.queryBuilder().where().eq("apiId", apiId).query());
         } catch (Exception e) {
             throw new DataBaseException("Error while removing from watchlist");
+        }
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(boolean success, String message) {
+        for (Observer observer : observers) {
+            observer.update(success, message);
         }
     }
 }
