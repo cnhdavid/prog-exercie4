@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb.ui;
 import at.ac.fhcampuswien.fhmdb.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -82,14 +83,10 @@ public class MovieCell extends ListCell<Movie> {
         writers.getStyleClass().add("text-white");
         mainCast.getStyleClass().add("text-white");
 
-        details.getChildren().add(releaseYear);
-        details.getChildren().add(rating);
-        details.getChildren().add(length);
-        details.getChildren().add(directors);
-        details.getChildren().add(writers);
-        details.getChildren().add(mainCast);
+        details.getChildren().addAll(releaseYear, rating, length, directors, writers, mainCast);
         return details;
     }
+
     @Override
     protected void updateItem(Movie movie, boolean empty) {
         super.updateItem(movie, empty);
@@ -112,10 +109,14 @@ public class MovieCell extends ListCell<Movie> {
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
 
-            detail.setMaxWidth(this.getScene().getWidth() - 30);
+            // Defer the execution to ensure the scene is available
+            Platform.runLater(() -> {
+                if (getScene() != null) {
+                    detail.setMaxWidth(getScene().getWidth() - 30);
+                }
+            });
 
             setGraphic(layout);
         }
     }
 }
-

@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
@@ -256,6 +257,4 @@ public class MovieListController implements Initializable {
         sortManager.sortMovies(observableMovies);
         sortedState = SortedState.DESCENDING;
     }
-
-
 }
