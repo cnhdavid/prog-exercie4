@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb.database;
 import at.ac.fhcampuswien.fhmdb.ui.Observable;
 import at.ac.fhcampuswien.fhmdb.ui.Observer;
 import com.j256.ormlite.dao.Dao;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class WatchlistRepository implements Observable {
     private static WatchlistRepository instance;
     private Dao<WatchlistMovieEntity, Long> dao;
-    private final List<Observer> observers = new ArrayList<>();
+    private static final List<Observer> observers = new ArrayList<>();
 
     public WatchlistRepository() throws DataBaseException {
         try {
@@ -35,13 +36,19 @@ public class WatchlistRepository implements Observable {
             throw new DataBaseException("Error while reading watchlist");
         }
     }
+
     public int addToWatchlist(WatchlistMovieEntity movie) throws DataBaseException {
         try {
-            // only add movie if it does not exist yet
+            // Only add the movie if it does not exist yet
             long count = dao.queryBuilder().where().eq("apiId", movie.getApiId()).countOf();
             if (count == 0) {
-                return dao.create(movie);
+                int result = dao.create(movie);
+                if (result > 0) {
+                    notifyObservers("Added Watchlist");
+                }
+                return result;
             } else {
+                notifyObservers("Already added to Watchlist");
                 return 0;
             }
         } catch (Exception e) {
@@ -58,7 +65,7 @@ public class WatchlistRepository implements Observable {
         }
     }
 
-    @Override
+
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
@@ -69,9 +76,9 @@ public class WatchlistRepository implements Observable {
     }
 
     @Override
-    public void notifyObservers(boolean success, String message) {
-        for (Observer observer : observers) {
-            observer.update(success, message);
-        }
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) observer.update(message);
     }
+
+
 }

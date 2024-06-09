@@ -1,9 +1,13 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
+import at.ac.fhcampuswien.fhmdb.database.DataBaseException;
+import at.ac.fhcampuswien.fhmdb.ui.Observer;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
@@ -16,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class MainController implements Initializable, Observer {
     @FXML
     public JFXHamburger hamburgerMenu;
 
@@ -50,7 +54,11 @@ public class MainController implements Initializable {
         });
 
         // Start with home view
-        navigateToMovielist();
+        try {
+            navigateToMovielist();
+        } catch (DataBaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void toggleHamburgerTransitionState() {
@@ -76,9 +84,10 @@ public class MainController implements Initializable {
         }
     }
 
-    private void setContent(String fxmlPath) {
+    private void setContent(String fxmlPath) throws DataBaseException {
         System.out.println("Attempting to load FXML: " + fxmlPath);
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+
         loader.setControllerFactory(myFactory);
         try {
             mainPane.setCenter(loader.load());
@@ -91,13 +100,26 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void navigateToMovielist() {
+    public void navigateToMovielist() throws DataBaseException {
         setContent("/fxml/movie-list.fxml");
     }
 
     @FXML
-    public void navigateToWatchlist() {
+    public void navigateToWatchlist() throws DataBaseException {
         setContent("/fxml/watchlist.fxml");
     }
+    
+    
+    
+    @Override
+    public void update(String message) {
 
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Watchlist Update");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
 }
