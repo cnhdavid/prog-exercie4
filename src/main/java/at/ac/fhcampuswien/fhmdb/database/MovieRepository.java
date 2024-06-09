@@ -17,7 +17,7 @@ public class MovieRepository {
         }
     }
 
-    public static MovieRepository getInstance() throws DataBaseException {
+    public static synchronized MovieRepository getInstance() throws DataBaseException {
         if (instance == null) {
             instance = new MovieRepository();
         }
@@ -32,6 +32,7 @@ public class MovieRepository {
             throw new DataBaseException("Error while counting movies");
         }
     }
+
     public List<MovieEntity> getAllMovies() throws DataBaseException {
         try {
             return dao.queryForAll();
@@ -69,4 +70,3 @@ public class MovieRepository {
         }
     }
 }
-

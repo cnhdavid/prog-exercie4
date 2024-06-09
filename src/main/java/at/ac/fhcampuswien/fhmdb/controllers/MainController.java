@@ -84,18 +84,16 @@ public class MainController implements Initializable, Observer {
         }
     }
 
-    private void setContent(String fxmlPath) throws DataBaseException {
-        System.out.println("Attempting to load FXML: " + fxmlPath);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-        loader.setControllerFactory(myFactory);
+    public void setContent(String fxmlPath){
+        FXMLLoader loader = new FXMLLoader(MainController.class.getResource(fxmlPath));
         try {
             mainPane.setCenter(loader.load());
-            System.out.println("FXML loaded successfully: " + fxmlPath);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Failed to load FXML file: " + fxmlPath);
-            System.err.println(e.getMessage());
+        }
+
+        if(!isMenuCollapsed){
+            toggleMenuDrawer();
         }
     }
 
@@ -108,8 +106,6 @@ public class MainController implements Initializable, Observer {
     public void navigateToWatchlist() throws DataBaseException {
         setContent("/fxml/watchlist.fxml");
     }
-    
-    
     
     @Override
     public void update(String message) {

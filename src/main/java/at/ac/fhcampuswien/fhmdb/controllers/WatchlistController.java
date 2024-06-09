@@ -20,7 +20,7 @@ public class WatchlistController implements Initializable {
     @FXML
     public JFXListView watchlistView;
 
-    private WatchlistRepository watchlistRepository;
+    public WatchlistRepository watchlistRepository;
 
     protected ObservableList<MovieEntity> observableWatchlist = FXCollections.observableArrayList();
 
