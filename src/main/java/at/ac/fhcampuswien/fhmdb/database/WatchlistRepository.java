@@ -21,6 +21,7 @@ public class WatchlistRepository implements Observable {
         }
     }
 
+    // Synchronized-Methode zum Abrufen der Singleton-Instanz von WatchlistRepository
     public static synchronized WatchlistRepository getInstance() throws DataBaseException {
         if (instance == null) {
             instance = new WatchlistRepository();
@@ -28,6 +29,7 @@ public class WatchlistRepository implements Observable {
         return instance;
     }
 
+    // Methode zum Abrufen der gesamten Watchlist aus der Datenbank
     public List<WatchlistMovieEntity> getWatchlist() throws DataBaseException {
         try {
             return dao.queryForAll();

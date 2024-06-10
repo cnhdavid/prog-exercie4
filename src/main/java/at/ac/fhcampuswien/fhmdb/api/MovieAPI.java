@@ -71,5 +71,5 @@ public class MovieAPI {
             // Bei einer Ausnahme wird eine MovieApiException mit der Fehlermeldung geworfen
             throw new MovieApiException(e.getMessage());
         }
-    }
+    }}
 
