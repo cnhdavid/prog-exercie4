@@ -1,11 +1,15 @@
-package at.ac.fhcampuswien.fhmdb.api;
+package at.ac.fhcampuswien.fhmdb.api;  // Das Paket, in dem sich die Klasse befindet
 
-public class MovieApiException extends Exception{
+// Definiert eine benutzerdefinierte Ausnahme, die von Exception erbt
+public class MovieApiException extends Exception {
+
+    // Standardkonstruktor ohne Parameter
     public MovieApiException() {
-        super();
+        super();  // Ruft den Standardkonstruktor der Basisklasse Exception auf
     }
 
+    // Konstruktor, der eine Fehlermeldung als Parameter annimmt
     public MovieApiException(String message) {
-        super(message);
+        super(message);  // Ruft den Konstruktor der Basisklasse mit der Fehlermeldung auf
     }
 }
