@@ -45,10 +45,12 @@ public class MainController implements Initializable, Observer {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize the hamburger transition
         transition = new HamburgerBasicCloseTransition(hamburgerMenu);
         transition.setRate(-1);
         drawer.toBack();
 
+        // Add event handler for hamburger menu click
         hamburgerMenu.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             toggleMenuDrawer();
         });
@@ -62,11 +64,13 @@ public class MainController implements Initializable, Observer {
     }
 
     private void toggleHamburgerTransitionState() {
+        // Toggle the state of the hamburger menu animation
         transition.setRate(transition.getRate() * -1);
         transition.play();
     }
 
     private void toggleMenuDrawer() {
+        // Toggle the state of the menu drawer
         toggleHamburgerTransitionState();
 
         if (isMenuCollapsed) {
@@ -85,13 +89,14 @@ public class MainController implements Initializable, Observer {
     }
 
     public void setContent(String fxmlPath){
+        // Set the content of the main pane
         FXMLLoader loader = new FXMLLoader(MainController.class.getResource(fxmlPath));
         try {
             mainPane.setCenter(loader.load());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        // If the menu is not collapsed, collapse it
         if(!isMenuCollapsed){
             toggleMenuDrawer();
         }
@@ -99,17 +104,19 @@ public class MainController implements Initializable, Observer {
 
     @FXML
     public void navigateToMovielist() throws DataBaseException {
+        // Navigate to the movie list view
         setContent("/fxml/movie-list.fxml");
     }
 
     @FXML
     public void navigateToWatchlist() throws DataBaseException {
+        // Navigate to the watchlist view
         setContent("/fxml/watchlist.fxml");
     }
     
     @Override
     public void update(String message) {
-
+        // Update method for observer pattern, showing an alert with the message
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Watchlist Update");
