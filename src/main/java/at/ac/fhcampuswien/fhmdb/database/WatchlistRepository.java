@@ -21,7 +21,7 @@ public class WatchlistRepository implements Observable {
         }
     }
 
-    public static WatchlistRepository getInstance() throws DataBaseException {
+    public static synchronized WatchlistRepository getInstance() throws DataBaseException {
         if (instance == null) {
             instance = new WatchlistRepository();
         }
