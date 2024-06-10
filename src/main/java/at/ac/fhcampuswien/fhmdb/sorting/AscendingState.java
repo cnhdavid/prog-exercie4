@@ -6,8 +6,10 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AscendingState implements SortState {
+    // Implement the sort method from the SortState interface
     @Override
     public void sort(List<Movie> movies) {
+        // Sort the list of movies by their title in ascending order
         movies.sort(Comparator.comparing(Movie::getTitle));
     }
 }
